@@ -85,4 +85,7 @@ def csrf_ok(request: Request) -> bool:
     """
     if request.method in SAFE_METHODS or not request.url.path.startswith("/api/"):
         return True
+    # Webhooks come from GitHub, not a browser; they're authenticated by signature instead.
+    if request.url.path.startswith("/api/webhooks/"):
+        return True
     return request.headers.get(CSRF_HEADER) == "1"

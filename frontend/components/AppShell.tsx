@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, useContext, useEffect, useState } from "react";
 
+import { RepoPicker, RepoSelectionProvider } from "@/components/RepoSelection";
 import { api, ApiError, type Me } from "@/lib/api";
 
 const SessionContext = createContext<Me | null>(null);
@@ -59,6 +60,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <SessionContext.Provider value={me}>
+      <RepoSelectionProvider>
       <div className="flex min-h-screen">
         <aside className="flex w-56 shrink-0 flex-col border-r border-line bg-white">
           <div className="flex h-14 items-center gap-2 border-b border-line px-5">
@@ -79,14 +81,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
 
         <div className="flex min-w-0 flex-1 flex-col">
           <header className="flex h-14 items-center justify-between border-b border-line bg-white px-6">
-            <div className="flex items-center gap-2 text-sm">
-              <select className="input w-56 py-1.5" disabled aria-label="Repository">
-                <option>No repositories yet</option>
-              </select>
-              <select className="input w-36 py-1.5" disabled aria-label="Branch">
-                <option>Branch</option>
-              </select>
-            </div>
+            <RepoPicker />
             <div className="flex items-center gap-3">
               {me.avatar_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
@@ -106,6 +101,7 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
           <main className="flex-1 p-6">{children}</main>
         </div>
       </div>
+      </RepoSelectionProvider>
     </SessionContext.Provider>
   );
 }

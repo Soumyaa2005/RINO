@@ -9,7 +9,17 @@ import type { NextRequest } from "next/server";
 export const dynamic = "force-dynamic";
 
 const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:8000";
-const FORWARD_REQUEST_HEADERS = ["cookie", "content-type", "accept", "x-rino-csrf", "user-agent"];
+const FORWARD_REQUEST_HEADERS = [
+  "cookie",
+  "content-type",
+  "accept",
+  "x-rino-csrf",
+  "user-agent",
+  // GitHub webhooks: the body is forwarded byte-for-byte so the signature still matches.
+  "x-github-event",
+  "x-github-delivery",
+  "x-hub-signature-256",
+];
 const DROP_RESPONSE_HEADERS = new Set(["set-cookie", "content-encoding", "content-length", "transfer-encoding", "connection"]);
 
 async function proxy(req: NextRequest, ctx: { params: Promise<{ path: string[] }> }) {

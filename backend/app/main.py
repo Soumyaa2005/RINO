@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import text
 
 from app.db import SessionLocal
-from app.routers import admin, auth
+from app.routers import admin, auth, github, repos
 from app.security import csrf_ok
 from app.services import get_or_create_org
 
@@ -39,3 +39,5 @@ def health() -> dict:
 
 app.include_router(auth.router)
 app.include_router(admin.router)
+app.include_router(github.router)
+app.include_router(repos.router)
